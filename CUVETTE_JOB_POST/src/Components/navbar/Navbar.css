@@ -1,0 +1,23 @@
+nav{
+    padding: 2rem 2rem 0 2rem;
+}
+
+.navbar {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-contact-btn {
+  width: 10.8rem;
+  height: 3.6rem;
+  font-family: DM Sans;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 3.7rem;
+  border: none;
+  background-color: transparent;
+  color: #576474;
+
+}

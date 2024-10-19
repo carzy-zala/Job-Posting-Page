@@ -1,0 +1,104 @@
+.auth-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 87vh;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.register-text {
+  font-family: DM Sans;
+  font-weight: 500;
+  text-align: left;
+  color: #292929b2;
+  padding: 0 3rem;
+}
+
+.auth-main-hero-div {
+  display: flex;
+  justify-content: center;
+}
+
+.register-text > p {
+  font-size: 2.3rem;
+  line-height: 2.9rem;
+}
+
+.auth-main-div {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(auto, 7);
+  gap: 1rem;
+  align-items: center;
+}
+
+.auth-inner-div {
+  border: 0.1rem solid #3f71ff;
+  border-radius: 1.5rem;
+  padding: 3rem;
+}
+
+.heading-text {
+  font-family: DM Sans;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 41.66px;
+  text-align: center;
+}
+
+.heading-desc {
+  text-align: center;
+}
+
+.submit-btn {
+  background-color: #0b66ef;
+  width: 40rem;
+  height: 3.5rem;
+  border: none;
+  color: #fff;
+  font-family: DM Sans;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 31.25px;
+  text-align: center;
+  border-radius: 0.7rem;
+}
+
+.input-fields {
+  border: none;
+  outline: none;
+  height: 100%;
+  width: 100%;
+  border-radius: 0.6rem;
+  background-color: transparent;
+  font-family: DM Sans;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 31.25px;
+  text-align: left;
+  color: #535353;
+}
+
+.input-div-container {
+  border: 0.1rem solid #cccccc;
+  background-color: #f4f4f4;
+  width: 40rem;
+  height: 4rem;
+  border-radius: 0.7rem;
+  padding: 0 1rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.verify-div {
+  background-color: #1eb700;
+    width: 3rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
