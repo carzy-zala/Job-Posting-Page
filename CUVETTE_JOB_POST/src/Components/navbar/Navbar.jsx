@@ -46,7 +46,7 @@ function Navbar() {
         <nav>
           <div className="navbar">
             <div>
-              <img src="src/assets/logo.png" />
+              <img src="assets/logo.png" />
             </div>
             <div>
               <Button className="nav-contact-btn">Contact</Button>
