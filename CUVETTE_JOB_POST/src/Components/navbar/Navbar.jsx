@@ -58,7 +58,7 @@ function Navbar() {
         <nav className="auth-nav">
           <div className="auth-navbar">
             <div>
-              <img src="assets/logo.png" />
+              <img src="/assets/logo.png" />
             </div>
             <div className="auth-nav-right-side-div">
               <div>
