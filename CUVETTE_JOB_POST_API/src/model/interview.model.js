@@ -19,6 +19,11 @@ const interviewSchema = new Schema({
     required: true,
   },
   invitedCandidates: [String],
+  companyId: {
+    type: Schema.Types.ObjectId,
+    ref: "Company",
+    required: true,
+  },
 });
 
 const Interview = model("Interview", interviewSchema);

@@ -1,18 +1,29 @@
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: "./.env",
+});
+
 import nodemailer from "nodemailer";
 
 //#region mail sender
+
+const user = process.env.APPLICATION_EMAIL;
+const pass = process.env.APPLICATION_SPECIFIC_PASSWORD;
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false, // true for port 465, false for other ports
   auth: {
-    user: process.env.APPLICATION_EMAIL,
-    pass: process.env.APPLICATION_SPECIFIC_PASSWORD,
+    user,
+    pass,
   },
 });
 
 async function sendOTPMail(companyMail, otp) {
+
+
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: `Cuvette <${process.env.APPLICATION_EMAIL}>`, // sender address

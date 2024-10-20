@@ -1,0 +1,51 @@
+.job-card {
+  display: grid;
+  grid-template-columns: repeat(1fr, 4);
+  gap: 2;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  height: 15rem;
+  width: 25rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  align-items: center;
+}
+
+.job-details,
+b {
+  font-size: 1.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-details:last-child {
+  justify-self: end;
+  padding-right: 1rem;
+}
+
+.job-delete-btn {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  font-size: 1.4rem;
+  background-color: red;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.job-cards {
+  display: grid;
+  padding: 2rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 3rem;
+  row-gap: 4rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .job-cards {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5rem;
+    row-gap: 5rem;
+  }
+}

@@ -1,14 +1,31 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Navbar from "./Components/navbar/Navbar";
-import Sidebar from "./Components/sidebar/Sidebar";
-import Register from "./page/Register";
+import AddInterview from "./page/createInterview/AddInterview";
+import Register from "./page/Register/Register";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { initialised } from "./Feature/adminSlice";
+import axios from "axios";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Register />,
+  },
+  {
+    path: "company",
+    element: <AddInterview />,
+  },
+]);
 
 function App() {
-  return (
-    <div>
-      <Register />
-    </div>
-  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initialised());
+  }, []);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;

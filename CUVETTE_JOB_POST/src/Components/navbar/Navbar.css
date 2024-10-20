@@ -1,8 +1,23 @@
-nav{
-    padding: 2rem 2rem 0 2rem;
+nav {
+  padding: 2rem 2rem 0 2rem;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+.auth-nav {
+  padding: 1rem 2rem;
+  border: 0.1rem solid #c5c5c5;
 }
 
 .navbar {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auth-navbar {
   display: grid;
   grid-template-columns: auto auto;
   justify-content: space-between;
@@ -19,5 +34,65 @@ nav{
   border: none;
   background-color: transparent;
   color: #576474;
+}
 
+.auth-nav-right-side-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-dropdown-btn {
+  width: 20rem;
+  height: 3.6rem;
+  font-family: DM Sans;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 3.7rem;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.nav-dropdown-side {
+  font-family: DM Sans;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 3.7rem;
+  display: flex;
+  /* justify-content: space-between; */
+  gap: 1rem;
+  align-items: center;
+}
+
+.auth-nav-dropdown-btn-div {
+  border: 0.1rem solid black;
+
+}
+
+.dropdown-div {
+  position: absolute;
+  width: 20rem;
+  height: 10rem;
+  background-color: #fff;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 0.1rem solid black;
+  right: 1.5%;
+  top: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-btn {
+  padding: 1rem 4rem;
+  font-size: 2rem;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: #fff;
+  border-radius: 0.5rem;
 }

@@ -41,7 +41,14 @@ const generateOTP = (length = 6) => {
 
 const saveOTP = async (companyId, otp) => {
   try {
-    await OTP.create({ companyId, otp });
+    const existedCompany = await OTP.findOne({ companyId });
+
+    if (existedCompany) {
+      existedCompany.otp = otp;
+      await existedCompany.save({ validateBeforeSave: false });
+    } else {
+      await OTP.create({ companyId, otp });
+    }
   } catch {
     throw new ApiError(500, "ERROR :: Internal server error !");
   }
@@ -74,6 +81,24 @@ const register = asyncHandler(async (req, res) => {
   const existedCompany = await Company.findOne({ email, phoneNo });
 
   if (existedCompany) {
+    if (!existedCompany.isVerified) {
+      const generatedOTP = generateOTP(8);
+
+      await sendOTPMail(email, generatedOTP);
+
+      await saveOTP(existedCompany._id, generatedOTP);
+
+      return res
+        .status(200)
+        .json(
+          new ApiResponse(
+            201,
+            existedCompany,
+            "Compnay already registered, Please verify !",
+          ),
+        );
+    }
+
     throw new ApiError(
       409,
       "ERROR :: Either your email or password already registered with us !",
@@ -101,21 +126,51 @@ const register = asyncHandler(async (req, res) => {
 
   const generatedOTP = generateOTP(8);
 
-  // save OTP
-
-  console.log("hi");
-  
-
   await sendOTPMail(email, generatedOTP);
-  console.log("hi");
 
-  await saveOTP(createdCompany, generatedOTP);
-  console.log("hi");
+  await saveOTP(createdCompany._id, generatedOTP);
 
   res
     .status(201)
     .json(
       new ApiResponse(201, createdCompany, "Compnay registered succesfully"),
+    );
+});
+
+//#endregion
+
+//#region login user
+
+const login = asyncHandler(async (req, res) => {
+  const { registeredPhoneNo: phoneNo, registeredEmail: email } = req.body;
+
+  if (!email || email.trim() === "" || !phoneNo || phoneNo.trim() === "") {
+    throw new ApiError(
+      400,
+      "ERROR :: Please make sure Phone Number and Email are not empty",
+    );
+  }
+
+  const existedCompany = await Company.findOne({ email, phoneNo });
+
+  if (!existedCompany) {
+    throw new ApiError(409, "ERROR :: Sorry you are not registered with us !");
+  }
+
+  const generatedOTP = generateOTP(8);
+
+  await sendOTPMail(email, generatedOTP);
+
+  await saveOTP(existedCompany._id, generatedOTP);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        201,
+        existedCompany,
+        "Compnay already registered, Please verify !",
+      ),
     );
 });
 
@@ -195,6 +250,9 @@ const logoutCompany = asyncHandler(async (req, res) => {
   await Company.findByIdAndUpdate(
     req.company._id,
     {
+      $set: { isVerified: false },
+    },
+    {
       $unset: { refreshToken: 1 },
     },
     {
@@ -216,4 +274,4 @@ const logoutCompany = asyncHandler(async (req, res) => {
 
 //#endregion
 
-export { register, logoutCompany };
+export { register, logoutCompany, login };

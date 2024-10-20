@@ -4,164 +4,133 @@ import ApiResponse from "../util/ApiResponse.js";
 import Interview from "../model/interview.model.js";
 import sendInvite from "../util/invitemail.js";
 
-// const templates = [
-//   {
-//     Subject: `Invitation to Apply for ${title} at ${companyName}`,
-
-//     message: `Hii Dear,
-
-// We hope this message finds you well. We are excited to announce an opening for the position of ${title} at ${companyName}. Below are the details of the job:
-
-// Job Description:${description}
-
-// Experience Level:${experienceLevel}
-
-// Application Deadline:${endData}
-
-// We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
-
-// Best regards,
-// ${title}
-// ${companyName}
-// `,
-//   },
-//   {
-//     Subject: ` Exciting Opportunity: ${title} at ${companyName}`,
-//     message: `Hi ,
-
-// I came across your profile and was impressed by your experience. We have a job opening for ${title} at ${companyName} and thought you might be a great fit.
-
-// Job Description:
-// ${description}
-
-// Experience Level:
-// ${experienceLevel}
-
-// Application Deadline:
-// ${endDate}
-
-// If you’re interested, I would love to discuss this opportunity further with you.
-
-// Looking forward to hearing from you!
-
-// Best,
-// ${title}
-// ${companyName}`,
-//   },
-//   {
-//     Subject: `Job Opportunity: ${title} at ${companyName}`,
-//     message: `Dear Candidate,
-
-// We are pleased to invite you to apply for the ${title} position at ${companyName}. Please find the job details below:
-
-// Job Description:
-// ${description}
-
-// Experience Level:
-// ${experienceLevel}
-
-// Application Deadline:
-// ${endDate}
-
-// We encourage you to submit your application if you meet the criteria. We look forward to reviewing your application.
-
-// Sincerely,
-// ${title}
-// ${companyName}
-// `,
-//   },
-//   {
-//     Subject: `Join Us as a ${title}!`,
-//     message: `Hey Candidate,
-
-// Hope you’re doing well! We have an opening for a ${title} at ${companyName}, and I thought you might be interested.
-
-// Job Description:
-// ${description}
-
-// Experience Level:
-// ${experienceLevel}
-
-// Application Deadline:
-// ${endDate}
-
-// Let me know if you’d like to chat about this opportunity!
-
-// Cheers,
-// ${title}
-// ${companyName}
-
-// `,
-//   },
-//   {
-//     Subject: `Apply Now for ${title} at ${companyName}`,
-//     message: `Dear Candidate,
-
-// We have an urgent opening for the position of ${title} at ${companyName} and would love for you to consider applying. Here are the details:
-
-// Job Description:
-// ${description}
-
-// Experience Level:
-// ${experienceLevel}
-
-// Application Deadline:
-// ${endDate}
-
-// If you are interested, please submit your application as soon as possible, as we are looking to fill this position quickly.
-
-// Thank you!
-// ${title}
-// ${companyName} `,
-//   },
-// ];
-
 const getMessage = (job) => {
-  const {
-    title,
-    companyName,
-    description,
-    experienceLevel,
-    endDate,
-    templateNo,
-  } = job;
-
+  const { title, description, experienceLevel, endDate, templateNo } = job;
 
   switch (templateNo) {
-    case 1:
-
+    case "1":
       return {
-        subject: `Invitation to Apply for ${title} at ${companyName}`,
-
+        subject: `TEMPLATE 1 :Invitation to Apply for ${title} `,
         message: `Hii Dear,
   
-  We hope this message finds you well. We are excited to announce an opening for the position of ${title} at ${companyName}. Below are the details of the job:
+We hope this message finds you well. We are excited to announce an opening for the position of ${title}.
   
-  Job Description:${description}
+${description}
+
+Below are the details of the job:
+
+Job Description:${description}
+
+Experience Level:${experienceLevel}
+
+Application Deadline:${endDate} (YYYY/MM/DD)
+
+We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
+
+Best regards,   
+${title}
+`,
+      };
+    case "2":
+      return {
+        subject: `TEMPLATE 2 :Invitation to Apply for ${title} `,
+        message: `Hii Dear,
   
-  Experience Level:${experienceLevel}
+We hope this message finds you well. We are excited to announce an opening for the position of ${title} at 
   
-  Application Deadline:${endDate}
+${description}
+
+Below are the details of the job:
+
+Job Description:${description}
+
+Experience Level:${experienceLevel}
+
+Application Deadline:${endDate} (YYYY/MM/DD)
+
+We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
+
+Best regards,   
+${title}
+`,
+      };
+    case "3":
+      return {
+        subject: `TEMPLATE 3 :Invitation to Apply for ${title} `,
+        message: `Hii Dear,
   
-  We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
+We hope this message finds you well. We are excited to announce an opening for the position of ${title} at 
   
-  Best regards,   
-  ${title}
-  ${companyName}  
-  `,
+${description}
+
+Below are the details of the job:
+
+Job Description:${description}
+
+Experience Level:${experienceLevel}
+
+Application Deadline:${endDate} (YYYY/MM/DD)
+
+We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
+
+Best regards,   
+${title}
+`,
+      };
+    case "4":
+      return {
+        subject: `TEMPLATE 4 :Invitation to Apply for ${title} `,
+        message: `Hii Dear,
+  
+We hope this message finds you well. We are excited to announce an opening for the position of ${title} at 
+  
+${description}
+
+Below are the details of the job:
+
+Job Description:${description}
+
+Experience Level:${experienceLevel}
+
+Application Deadline:${endDate} (YYYY/MM/DD)
+
+We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
+
+Best regards,   
+${title}
+`,
+      };
+    case "5":
+      return {
+        subject: `TEMPLATE 5 :Invitation to Apply for ${title} `,
+        message: `Hii Dear,
+  
+We hope this message finds you well. We are excited to announce an opening for the position of ${title} at 
+  
+${description}
+
+Below are the details of the job:
+
+Job Description:${description}
+
+Experience Level:${experienceLevel}
+
+Application Deadline:${endDate} (YYYY/MM/DD)
+
+We believe your skills and experience could be a great match for our team. If you’re interested, please submit your application by the deadline.
+
+Best regards,   
+${title}
+`,
       };
   }
 };
 
 export const addInterview = asyncHandler(async (req, res) => {
-  const {
-    title,
-    description,
-    experienceLevel,
-    endDate,
-    invitedCandidates,
-    templateNo,
-  } = req.body;
+  const { title, description, experienceLevel, endDate, invitedCandidates } =
+    req.body;
+
+  const companyId = req.company._id
 
   if (
     !title ||
@@ -177,24 +146,41 @@ export const addInterview = asyncHandler(async (req, res) => {
     );
   }
 
-
   const createdInterview = await Interview.create({
     title,
     description,
     experienceLevel,
     endDate,
     invitedCandidates: invitedCandidates || [],
+    companyId
   });
 
-
   const message = getMessage(req.body);
-
 
   if (invitedCandidates.length) {
     await sendInvite(invitedCandidates, message);
   }
 
+  
   res
     .status(200)
     .json(new ApiResponse(200, createdInterview, "Job created succesfully !"));
+});
+
+export const getInterviews = asyncHandler(async (req, res) => {
+  const companyId = req.company._id;
+
+  const interviews = await Interview.find({ companyId });
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, { interviews }, "Your all interviews"));
+});
+
+export const deleteInterview = asyncHandler(async (req, res) => {
+  const { interviewId } = req.params;
+
+  await Interview.findByIdAndDelete(interviewId);
+
+  res.status(200).json(new ApiResponse(200, {}, "Interview delete succefully"));
 });
