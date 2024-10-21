@@ -44,7 +44,7 @@ If you already have a Firebase developer account, you can skip this step.
 
 Copy these keys and add them to the **.env** file of **Frontend** as described in step 2 below.
 
-Please keep in mind:
+#### 5️⃣ Please keep in mind:
 
 - 🔗 Refer to the official Firebase documentation for guidance.
 
