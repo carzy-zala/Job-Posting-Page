@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { initialised } from "../../Feature/adminSlice.js";
 import { useNavigate } from "react-router-dom";
 import CreatedInterview from "../../Components/CreatedJobs/CreatedInterview.jsx";
+import axios from "axios";
 
 function AddInterview() {
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ function AddInterview() {
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigator("/");
+    } else {
+      axios.defaults.headers.Authorization =
+        localStorage.getItem("accessToken");
     }
   }, []);
 
@@ -285,7 +289,7 @@ function AddInterview() {
                 className="add-input-fields"
                 id="endDate"
                 type="date"
-                min={new Date().toISOString().split('T')[0]}
+                min={new Date().toISOString().split("T")[0]}
                 {...register("endDate", {
                   required: "Please select End Date !",
                 })}

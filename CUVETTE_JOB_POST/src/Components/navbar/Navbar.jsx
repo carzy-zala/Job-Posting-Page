@@ -35,6 +35,7 @@ function Navbar() {
         navigator("/");
       } else {
         toast.error(responseData.message);
+        setDropDownClick(!!dropDownClick);
       }
       setIsLoading(false);
     }

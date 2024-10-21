@@ -5,7 +5,6 @@ import Register from "./page/Register/Register";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { initialised } from "./Feature/adminSlice";
-import axios from "axios";
 
 const router = createBrowserRouter([
   {

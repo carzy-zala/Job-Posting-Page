@@ -55,7 +55,7 @@ const saveOTP = async (companyId, otp) => {
 };
 //#endregion
 
-//#region Register user
+//#region Register Company
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, phoneNo, companyName, employee } = req.body;
@@ -78,11 +78,31 @@ const register = asyncHandler(async (req, res) => {
     );
   }
 
-  const existedCompany = await Company.findOne({ email, phoneNo });
+  const existedCompany = await Company.findOne({
+    $or: [{ email }, { phoneNo }],
+  });
 
   if (existedCompany) {
+    if (existedCompany.email === email && existedCompany.phoneNo !== phoneNo) {
+      throw new ApiError(
+        409,
+        "ERROR :: Your email is already registered with us !",
+      );
+    }
+
+    if (existedCompany.email !== email && existedCompany.phoneNo === phoneNo) {
+      throw new ApiError(
+        409,
+        "ERROR :: Your phone number is already registered with us !",
+      );
+    }
+
+    if (existedCompany.isVerified) {
+      throw new ApiError(409, "ERROR :: You are already registered with us !");
+    }
+
     if (!existedCompany.isVerified) {
-      const generatedOTP = generateOTP(8);
+      const generatedOTP = generateOTP(6);
 
       await sendOTPMail(email, generatedOTP);
 
@@ -98,11 +118,6 @@ const register = asyncHandler(async (req, res) => {
           ),
         );
     }
-
-    throw new ApiError(
-      409,
-      "ERROR :: Either your email or password already registered with us !",
-    );
   }
 
   const company = await Company.create({
@@ -124,7 +139,7 @@ const register = asyncHandler(async (req, res) => {
     );
   }
 
-  const generatedOTP = generateOTP(8);
+  const generatedOTP = generateOTP(6);
 
   await sendOTPMail(email, generatedOTP);
 
@@ -157,7 +172,7 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(409, "ERROR :: Sorry you are not registered with us !");
   }
 
-  const generatedOTP = generateOTP(8);
+  const generatedOTP = generateOTP(6);
 
   await sendOTPMail(email, generatedOTP);
 
@@ -213,8 +228,13 @@ export const verifyCompany = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid request !");
   }
 
-  company.isVerified = true;
-  await company.save({ validateBeforeSave: false });
+  await Company.updateOne(
+    { _id: companyId },
+    { $set: { isVerified: true } },
+    {
+      new: true,
+    },
+  );
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     company._id,
@@ -249,9 +269,7 @@ export const verifyCompany = asyncHandler(async (req, res) => {
 const logoutCompany = asyncHandler(async (req, res) => {
   await Company.findByIdAndUpdate(
     req.company._id,
-    {
-      $set: { isVerified: false },
-    },
+
     {
       $unset: { refreshToken: 1 },
     },

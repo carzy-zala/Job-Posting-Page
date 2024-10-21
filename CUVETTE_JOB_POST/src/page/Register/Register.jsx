@@ -22,11 +22,19 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { verify } from "../../Feature/adminSlice.js";
 import setToken from "../../utils/setToken.js";
+import { auth } from "../../firebase/firebaseConfig.js";
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
 
 function Register() {
   const navigator = useNavigate();
 
   const dispatch = useDispatch();
+
+  const [otpVerification, setOtpVerification] = useState();
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
@@ -34,6 +42,78 @@ function Register() {
     }
   });
 
+  //#region firebase
+
+  async function setUpRecaptha(number) {
+    let recaptchaVerifier;
+
+    if (isLoginClick) {
+      recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-2", {
+        size: "invisible",
+        callback: (response) => {
+          onSignInSubmit();
+        },
+      });
+    } else {
+      recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-1", {
+        size: "invisible",
+        callback: (response) => {
+          onSignInSubmit();
+        },
+      });
+    }
+
+    // Add this for render captcha :  recaptchaVerifier.render();
+    // signInWithPhoneNumber(auth, number, recaptchaVerifier);
+
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier)
+      .then((confirmationResult) => {
+        return confirmationResult;
+      })
+      .catch((error) => {
+        console.error("Error sending OTP:", error);
+        throw error;
+      });
+  }
+
+  const getOtp = async (phoneNumber) => {
+    if (phoneNumber === "" || phoneNumber === undefined) {
+      toast.error("mobile_num is required");
+      return;
+    }
+
+    try {
+      const response = await setUpRecaptha(phoneNumber);
+
+      return response;
+    } catch (err) {
+      if (err) {
+        setIsVerified((prev) => ({ ...prev, phone: false }));
+        toast.error(err);
+      }
+    }
+  };
+
+  const verifyOtp = async (otp) => {
+    console.log(otp);
+    console.log(otpVerification);
+
+    if (otp === "" || otp === null) return alert("otp must required");
+    try {
+      otpVerification.confirm(otp).then(async (result) => {
+        console.log("", result);
+        setIsVerified((prev) => ({ ...prev, phone: true }));
+        toast.success("done");
+        await compnyVerification(true, isVerified.email);
+      });
+    } catch (err) {
+      toast.error("Please enter valid OTP");
+    }
+  };
+
+  //#endregion
+
+  //#region  state variable
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: "",
@@ -79,6 +159,7 @@ function Register() {
   });
 
   const [companyId, setCompanyId] = useState(null);
+  //#endregion
 
   //#region Register Company
   const registerCompany = async (data) => {
@@ -92,12 +173,26 @@ function Register() {
         data
       );
 
-      if (responseData.success) {
+      const result = await getOtp(data.phoneNo);
+
+      console.log(responseData);
+      console.log(result);
+      
+      
+
+      if (responseData.success && result) {
         toast.success(responseData.message);
         setCompanyId(responseData.data._id);
+        setOtpVerification(result);
         setIsProcedClick(true);
       } else {
-        toast.error(responseData.message);
+        if (result) {
+          toast.error(responseData.message);
+        } else {
+          toast.error(
+            "Getting Error while generating OTP ! Please try letter or refresh page !"
+          );
+        }
       }
 
       setIsLoading((prev) => ({ ...prev, register: false }));
@@ -132,25 +227,37 @@ function Register() {
 
   //#endregion
 
-  const compnyVerification = async () => {
-    const responseData = await axiosGet(
-      `${import.meta.env.VITE_CUVETTE_JOB_POST_API_URL}${
-        apiRoutes.VERIFY_COMPANY
-      }`.replace(":companyId", companyId),
-      {
-        companyId,
+  const compnyVerification = async (phone, email) => {
+    console.log(isVerified, "phone", phone, "mail", email);
+
+    if ((isVerified.phone || phone) && (isVerified.email || email)) {
+      const responseData = await axiosGet(
+        `${import.meta.env.VITE_CUVETTE_JOB_POST_API_URL}${
+          apiRoutes.VERIFY_COMPANY
+        }`.replace(":companyId", companyId),
+        {
+          companyId,
+        }
+      );
+
+      console.log(
+        `${import.meta.env.VITE_CUVETTE_JOB_POST_API_URL}${
+          apiRoutes.VERIFY_COMPANY
+        }`.replace(":companyId", companyId)
+      );
+
+      console.log(responseData);
+
+      if (responseData.success) {
+        const { accessToken, refreshToken, company } = responseData.data;
+        dispatch(verify(company.name));
+        setToken(accessToken, refreshToken);
+        navigator("/company");
       }
-    );
-
-    if (responseData.success) {
-      const { accessToken, refreshToken, company } = responseData.data;
-      dispatch(verify(company.name));
-      setToken(accessToken, refreshToken);
-
-      navigator("/company");
     }
   };
 
+  //#region verify email
   const verifyEmail = async (data) => {
     if (!isLoading.email) {
       setIsLoading((prev) => ({ ...prev, email: true }));
@@ -168,9 +275,9 @@ function Register() {
       if (responseData.success) {
         setIsVerified((prev) => ({ ...prev, email: true }));
 
-        if (isVerified.phone || true) {
-          await compnyVerification();
-        }
+        toast.success("done");
+
+        await compnyVerification(isVerified.phone, true);
       } else {
         toast.error("Wrong OTP !! Please try again !");
       }
@@ -183,18 +290,31 @@ function Register() {
     toast.error(error.emailOTP.message);
   };
 
-  const verifyPhone = () => {
-    setIsVerified((prev) => {
-      return { ...prev, phone: true };
-    });
-    setIsVerified((prev) => {
-      return { ...prev, phone: false };
-    });
+  //#endregion
+
+  //#region verify phone
+
+  const verifyPhone = async (data) => {
+    if (!isLoading.phone) {
+      setIsLoading((prev) => {
+        return { ...prev, phone: true };
+      });
+
+      await verifyOtp(data.phoneOTP);
+
+      setIsLoading((prev) => {
+        return { ...prev, phone: false };
+      });
+    }
   };
 
   const verifyPhoneError = (error) => {
     toast.error(error.phoneOTP.message);
   };
+
+  //#endregion
+
+  //#region login company
 
   const loginCompany = async (data) => {
     if (!isLoading.login) {
@@ -207,12 +327,19 @@ function Register() {
         data
       );
 
-      if (responseData.success) {
+      const responseOfPhoneOTP = await getOtp(data.registeredPhoneNo);
+
+      if (responseData.success && responseOfPhoneOTP) {
         toast.success(responseData.message);
+        setOtpVerification(responseOfPhoneOTP);
         setCompanyId(responseData.data._id);
         setIsProcedClick(true);
       } else {
-        toast.error(responseData.message);
+        if (!responseOfPhoneOTP) {
+          toast.error("Error occured while sending OTP to your Phone Number !");
+        } else {
+          toast.error(responseData.message);
+        }
       }
 
       setIsLoading((prev) => ({ ...prev, login: false }));
@@ -229,10 +356,15 @@ function Register() {
     }
   };
 
+  //#endregion
+
   return (
     <Fragment>
       <Navbar />
       <section>
+        <div id="recaptcha-1"></div>
+        <div id="recaptcha-2"></div>
+
         <div className="auth-section">
           <div className="register-text">
             <p>
@@ -443,7 +575,6 @@ function Register() {
                             </span>
                           </p>
                         </div>
-
                         <Container>
                           <Button
                             className="submit-btn"
@@ -501,12 +632,12 @@ function Register() {
                           required: "Please enter Email OTP",
 
                           minLength: {
-                            value: 8,
+                            value: 6,
                             message:
                               "Email OTP must be at least 6 characters long",
                           },
                           maxLength: {
-                            value: 8,
+                            value: 6,
                             message:
                               "Email OTP must be at least 6 characters long",
                           },

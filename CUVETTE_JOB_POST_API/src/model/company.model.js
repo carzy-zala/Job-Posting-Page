@@ -30,7 +30,7 @@ const compnaySchema = new Schema({
   },
   employee: {
     type: String,
-    default: 2,
+    default: "0",
     required: true,
   },
   refreshToken: {
