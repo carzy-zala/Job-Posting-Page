@@ -3,6 +3,7 @@
 If you're looking to set up a job portal on your website, these **plug-and-play pages** will get you started quickly.
 
 💻 **Frontend Code**: `CUVETTE_JOB_POST`  [📂](https://github.com/carzy-zala/Job-Posting-Page/tree/main/CUVETTE_JOB_POST)
+
 🛠️ **Backend Code**: `CUVETTE_JOB_POST_API` [📂](https://github.com/carzy-zala/Job-Posting-Page/tree/main/CUVETTE_JOB_POST_API)
 
 ## 🚀 Steps to Set It Up Locally:
@@ -42,6 +43,13 @@ If you already have a Firebase developer account, you can skip this step.
   ![Api Keys](https://github.com/user-attachments/assets/5d993823-5918-4f51-a9a6-3f38d451c701)
 
 Copy these keys and add them to the **.env** file of **Frontend** as described in step 2 below.
+
+Please keep in mind:
+
+- 🔗 Refer to the official Firebase documentation for guidance.
+
+- 🚫 Do not use the API keys shown in the images above.
+
 
 ---
 
