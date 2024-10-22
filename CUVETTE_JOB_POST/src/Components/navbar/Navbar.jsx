@@ -16,11 +16,6 @@ function Navbar() {
   const isAuthenticated = useSelector((store) => store.admin.isAuthenticated);
   const dispatch = useDispatch();
 
-  const yourName = useSelector((store) => store.admin.yourName);
-
-  console.log(yourName);
-  
-
   const navigator = useNavigate();
   const [dropDownClick, setDropDownClick] = useState(false);
 
@@ -84,7 +79,7 @@ function Navbar() {
                         borderRadius: "50%",
                       }}
                     ></div>
-                    {yourName}
+                    Your Name
                   </div>
                   {dropDownClick ? (
                     <FontAwesomeIcon
