@@ -95,13 +95,10 @@ function Register() {
   };
 
   const verifyOtp = async (otp) => {
-    console.log(otp);
-    console.log(otpVerification);
 
     if (otp === "" || otp === null) return alert("otp must required");
     try {
       otpVerification.confirm(otp).then(async (result) => {
-        console.log("", result);
         setIsVerified((prev) => ({ ...prev, phone: true }));
         toast.success("done");
         await compnyVerification(true, isVerified.email);
@@ -224,7 +221,6 @@ function Register() {
   //#endregion
 
   const compnyVerification = async (phone, email) => {
-    console.log(isVerified, "phone", phone, "mail", email);
 
     if ((isVerified.phone || phone) && (isVerified.email || email)) {
       const responseData = await axiosGet(
@@ -236,13 +232,6 @@ function Register() {
         }
       );
 
-      console.log(
-        `${import.meta.env.VITE_CUVETTE_JOB_POST_API_URL}${
-          apiRoutes.VERIFY_COMPANY
-        }`.replace(":companyId", companyId)
-      );
-
-      console.log(responseData);
 
       if (responseData.success) {
         const { accessToken, refreshToken, company } = responseData.data;
