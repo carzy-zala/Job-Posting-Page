@@ -174,11 +174,7 @@ function Register() {
       );
 
       const result = await getOtp(data.phoneNo);
-
-      console.log(responseData);
-      console.log(result);
-      
-      
+     
 
       if (responseData.success && result) {
         toast.success(responseData.message);

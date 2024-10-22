@@ -1,7 +1,9 @@
-PORT = 
-MONGODB_URI = 
-CORS_ORIGIN = 
-ACCESS_TOKEN_SECRET = 
-ACCESS_TOKEN_TIME = 
-REFRESH_TOKEN_SECRET = 
-REFRESH_TOKEN_TIME = 
+PORT = <port number of server>
+MONGODB_URI = <dabase url>
+CORS_ORIGIN = <your fronend domai>
+ACCESS_TOKEN_SECRET = <mention your secret key for encryption of access token>
+ACCESS_TOKEN_TIME = <mention like this (10m,10d,10y)>
+REFRESH_TOKEN_SECRET = <mention your secret key for encryption of refresh token>
+REFRESH_TOKEN_TIME = <mention like this (10m,10d,10y)>
+APPLICATION_SPECIFIC_PASSWORD = <you personalized mail id>
+APPLICATION_EMAIL = <your personalized application specific password>
