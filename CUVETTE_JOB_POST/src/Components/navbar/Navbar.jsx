@@ -18,6 +18,9 @@ function Navbar() {
 
   const yourName = useSelector((store) => store.admin.yourName);
 
+  console.log(yourName);
+  
+
   const navigator = useNavigate();
   const [dropDownClick, setDropDownClick] = useState(false);
 

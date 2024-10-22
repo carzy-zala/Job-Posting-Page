@@ -95,7 +95,6 @@ function Register() {
   };
 
   const verifyOtp = async (otp) => {
-
     if (otp === "" || otp === null) return alert("otp must required");
     try {
       otpVerification.confirm(otp).then(async (result) => {
@@ -103,8 +102,15 @@ function Register() {
         toast.success("done");
         await compnyVerification(true, isVerified.email);
       });
+
+      setIsLoading((prev) => {
+        return { ...prev, phone: false };
+      });
     } catch (err) {
       toast.error("Please enter valid OTP");
+      setIsLoading((prev) => {
+        return { ...prev, phone: false };
+      });
     }
   };
 
@@ -171,7 +177,6 @@ function Register() {
       );
 
       const result = await getOtp(data.phoneNo);
-     
 
       if (responseData.success && result) {
         toast.success(responseData.message);
@@ -221,7 +226,6 @@ function Register() {
   //#endregion
 
   const compnyVerification = async (phone, email) => {
-
     if ((isVerified.phone || phone) && (isVerified.email || email)) {
       const responseData = await axiosGet(
         `${import.meta.env.VITE_CUVETTE_JOB_POST_API_URL}${
@@ -232,10 +236,11 @@ function Register() {
         }
       );
 
-
       if (responseData.success) {
         const { accessToken, refreshToken, company } = responseData.data;
-        dispatch(verify(company.name));
+        const name = company.name;
+
+        dispatch(verify(name));
         setToken(accessToken, refreshToken);
         navigator("/company");
       }
@@ -286,10 +291,6 @@ function Register() {
       });
 
       await verifyOtp(data.phoneOTP);
-
-      setIsLoading((prev) => {
-        return { ...prev, phone: false };
-      });
     }
   };
 
